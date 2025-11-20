@@ -60,12 +60,13 @@ def delete_conversation(conversation_id: int) -> str:
 
 @main_bp.route("/message", methods=["POST"])
 def send_message() -> Union[str, tuple[Response, int]]:
+    """Save user message and return user bubble + loading indicator immediately"""
     conversation_id = request.form.get("conversation_id")
     content = request.form.get("content")
 
     if not conversation_id or not content:
         current_app.logger.warning("Attempted to send message with missing data")
-        return jsonify({"error": "Missing data"}), 400
+        return "Missing data", 400
 
     current_app.logger.info(f"Processing message for conversation {conversation_id}")
 
@@ -74,7 +75,35 @@ def send_message() -> Union[str, tuple[Response, int]]:
     )
     db.session.add(user_msg)
     db.session.commit()
-    current_app.logger.debug("User message saved")
+    current_app.logger.debug(f"User message saved with ID: {user_msg.id}")
+
+    # Return user message + loading indicator
+    return render_template(
+        "partials/message_pair.html",
+        content=content,
+        conversation_id=conversation_id,
+        message_id=user_msg.id,
+    )
+
+
+@main_bp.route("/message/bot/<int:conversation_id>", methods=["GET"])
+def get_bot_response(conversation_id: int) -> Union[str, tuple[Response, int]]:
+    """Process bot response asynchronously after user message is displayed"""
+    current_app.logger.info(f"Getting bot response for conversation {conversation_id}")
+
+    last_user_msg = (
+        Message.query.filter_by(conversation_id=conversation_id, sender="user")
+        .order_by(Message.timestamp.desc())
+        .first()
+    )
+
+    if not last_user_msg:
+        current_app.logger.warning(
+            f"No user message found for conversation {conversation_id}"
+        )
+        return "No user message found", 400
+
+    content = last_user_msg.content
 
     # Determine which bot to respond
     bots: List[Bot] = Bot.query.all()
@@ -89,20 +118,19 @@ def send_message() -> Union[str, tuple[Response, int]]:
 
     current_app.logger.info(f"Routed to bot: {target_bot.name}")
 
-    # Get history
+    # Get history (excluding the last user message to avoid double counting)
     history = [
         m.to_dict()
-        for m in Message.query.filter_by(conversation_id=int(conversation_id))
+        for m in Message.query.filter_by(conversation_id=conversation_id)
         .order_by(Message.timestamp)
         .all()
     ]
-    # Remove the just added user message from history to avoid double counting
     history = history[:-1]
 
     response_content = llm_service.get_bot_response(target_bot, history, content)
 
     bot_msg = Message(
-        conversation_id=int(conversation_id),
+        conversation_id=conversation_id,
         sender=target_bot.name,
         content=response_content,
     )
@@ -110,9 +138,9 @@ def send_message() -> Union[str, tuple[Response, int]]:
     db.session.commit()
     current_app.logger.debug("Bot response saved")
 
-    # Return the two new messages (user and bot) rendered
+    # Return just the bot message
     return render_template(
-        "partials/message_pair.html", user_msg=user_msg, bot_msg=bot_msg
+        "partials/bot_message.html", sender=bot_msg.sender, content=bot_msg.content
     )
 
 

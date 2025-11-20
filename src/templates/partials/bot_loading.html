@@ -1,13 +1,5 @@
-<!-- User Message -->
-<div class="flex justify-end">
-  <div class="bg-blue-500 text-white p-3 rounded-lg max-w-xl">
-    {{ content }}
-  </div>
-</div>
-
-<!-- Bot Loading Indicator (will auto-load bot response) -->
-<div id="bot-loading-{{ message_id }}" class="flex justify-start" hx-get="/message/bot/{{ conversation_id }}"
-  hx-trigger="load" hx-target="#bot-loading-{{ message_id }}" hx-swap="outerHTML">
+<!-- Bot Loading Indicator -->
+<div class="flex justify-start" hx-get="/message/bot/{{ conversation_id }}" hx-trigger="load" hx-swap="outerHTML">
   <div class="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-xl">
     <div class="flex items-center space-x-2">
       <div class="flex space-x-1">

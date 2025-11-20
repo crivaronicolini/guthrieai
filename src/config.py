@@ -10,14 +10,21 @@ class Config:
 
     if DOCKER_CONTAINER:
         SQLALCHEMY_DATABASE_URI = (
-            os.environ.get("SQLALCHEMY_DATABASE_URI") or "sqlite:////data/chat.db"
+            os.environ.get("SQLALCHEMY_DATABASE_URI_DOCKER")
+            or "sqlite:////data/chat.db"
         )
         OLLAMA_BASE_URL = (
-            os.environ.get("OLLAMA_BASE_URL") or "http://host.docker.internal:11434"
+            os.environ.get("OLLAMA_BASE_URL_DOCKER")
+            or "http://host.docker.internal:11434"
         )
     else:
-        SQLALCHEMY_DATABASE_URI = "sqlite:///../../data/chat.db"
-        OLLAMA_BASE_URL = "http://localhost:11434"
+        SQLALCHEMY_DATABASE_URI = (
+            os.environ.get("SQLALCHEMY_DATABASE_URI_LOCAL")
+            or "sqlite:///../../data/chat.db"
+        )
+        OLLAMA_BASE_URL = (
+            os.environ.get("OLLAMA_BASE_URL_LOCAL") or "http://localhost:11434"
+        )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

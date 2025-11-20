@@ -29,10 +29,11 @@
           hx-target="#chat-messages" 
           hx-swap="beforeend"
           hx-on::after-request="this.reset()"
+          hx-trigger="submit, keydown[ctrlKey&&key=='Enter'] from:find input[name='content']"
           class="flex space-x-2">
         <input type="hidden" name="conversation_id" value="{{ conversation.id }}">
         <input type="text" name="content" placeholder="Type a message..." class="flex-1 border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Send</button>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" title="Send message (Ctrl+Enter)">Send</button>
     </form>
 </div>
 

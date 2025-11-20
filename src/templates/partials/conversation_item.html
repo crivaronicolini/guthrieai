@@ -1,5 +1,8 @@
 <li class="group flex justify-between items-center p-2 hover:bg-gray-100 rounded cursor-pointer"
-  hx-get="/conversations/{{ conversation.id }}" hx-target="#main-chat" hx-swap="innerHTML">
+  hx-get="/conversations/{{ conversation.id }}" 
+  hx-target="#main-chat" 
+  hx-swap="innerHTML"
+  hx-trigger="load, click"
   <span class="truncate">{{ conversation.name }}</span>
   <button
     class="text-red-500 hover:text-red-700 hidden group-hover:flex items-center justify-center w-6 h-6 rounded-full hover:bg-white transition-colors"

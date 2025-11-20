@@ -1,0 +1,57 @@
+<dialog id="create-bot-modal" class="p-0 rounded-lg shadow-xl w-full max-w-md">
+  <div class="p-6 bg-white">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-bold text-gray-900">Create New Bot</h3>
+      <button type="button" onclick="document.getElementById('create-bot-modal').close()"
+        class="text-gray-400 hover:text-gray-500">
+        <span class="text-2xl">&times;</span>
+      </button>
+    </div>
+
+    <form hx-post="/bots" hx-target="#bot-list" hx-swap="beforeend"
+      hx-on::after-request="if(event.detail.successful) { this.reset(); document.getElementById('create-bot-modal').close(); }"
+      class="space-y-4">
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+        <input type="text" name="name"
+          class="w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" required>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+        <input type="text" name="role" placeholder="e.g. Coding Assistant"
+          class="w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" required>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">System Prompt</label>
+        <textarea name="system_prompt" rows="3"
+          class="w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+          required></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Model</label>
+        <select name="model"
+          class="w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500">
+          <option value="gemma3" selected>gemma3</option>
+          <option value="llama3">llama3</option>
+          <option value="mistral">mistral</option>
+          <option value="tinyllama">tinyllama</option>
+          <option value="gemma">gemma</option>
+        </select>
+      </div>
+
+      <div class="flex justify-end space-x-3 pt-4">
+        <button type="button" onclick="document.getElementById('create-bot-modal').close()"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+          Cancel
+        </button>
+        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+          Create Bot
+        </button>
+      </div>
+    </form>
+  </div>
+</dialog>

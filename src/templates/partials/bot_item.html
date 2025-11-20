@@ -1,0 +1,13 @@
+<li class="p-2 bg-white border rounded shadow-sm">
+    <div class="font-bold text-xs text-gray-600">{{ bot.name }} ({{ bot.role }})</div>
+    <div class="mt-1 flex items-center space-x-2">
+        <select class="text-xs border rounded p-1" 
+                hx-put="/bots/{{ bot.id }}" 
+                hx-target="this"
+                name="model"
+                hx-trigger="change">
+            <option value="gemma3" {% if bot.model == 'gemma3' %}selected{% endif %}>gemma3</option>
+            <option value="llama3" {% if bot.model == 'llama3' %}selected{% endif %}>llama3</option>
+        </select>
+    </div>
+</li>

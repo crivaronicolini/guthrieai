@@ -1,0 +1,14 @@
+<!-- User Message -->
+<div class="flex justify-end">
+  <div class="bg-blue-500 text-white p-3 rounded-lg max-w-xl">
+    {{ user_msg.content }}
+  </div>
+</div>
+
+<!-- Bot Response -->
+<div class="flex justify-start">
+  <div class="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-xl">
+    <div class="text-xs font-bold text-gray-500 mb-1">{{ bot_msg.sender }}</div>
+    {{ bot_msg.content }}
+  </div>
+</div>

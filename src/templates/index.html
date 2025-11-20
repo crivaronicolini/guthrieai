@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Sidebar -->
+<div class="w-64 bg-white border-r flex flex-col">
+    <div class="p-4 border-b">
+        <h1 class="text-xl font-bold text-blue-600">GuthrieAI</h1>
+    </div>
+    
+    <!-- Conversations -->
+    <div class="p-4 border-b flex-1 overflow-y-auto">
+        <div class="flex justify-between items-center mb-2">
+            <h2 class="font-semibold text-gray-700">Conversations</h2>
+            <button type="button" 
+                    hx-post="/conversations" 
+                    hx-target="#conversation-list" 
+                    hx-swap="afterbegin"
+                    class="text-blue-500 hover:text-blue-700 text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors"
+                    title="New Conversation">
+                +
+            </button>
+        </div>
+        <ul id="conversation-list" class="space-y-2">
+            {% for conversation in conversations %}
+                {% include 'partials/conversation_item.html' %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Bots -->
+    <div class="h-1/3 bg-gray-50 flex flex-col border-t">
+        <!-- Sticky Header -->
+        <div class="p-4 border-b bg-gray-50 flex justify-between items-center shrink-0">
+            <h2 class="font-semibold text-gray-700">Active Bots</h2>
+            <button onclick="document.getElementById('create-bot-modal').showModal()" 
+                    class="text-xs px-2 py-1 font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100 transition-colors">
+                + New Bot
+            </button>
+        </div>
+        
+        <!-- Scrollable List -->
+        <div class="flex-1 overflow-y-auto p-4 pt-2">
+            <ul id="bot-list" class="space-y-2 text-sm">
+                {% for bot in bots %}
+                    {% include 'partials/bot_item.html' %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Main Chat Area -->
+<div id="main-chat" class="flex-1 flex flex-col bg-white">
+    <div class="flex-1 flex items-center justify-center text-gray-400">
+        Select a conversation to start chatting
+    </div>
+</div>
+
+{% include 'partials/create_bot_modal.html' %}
+{% endblock %}

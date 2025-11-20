@@ -19,6 +19,7 @@ Clone the repo and run:
 ```sh
 git clone git@github.com:crivaronicolini/guthrieai.git
 cd guthrieai
+cp env.example .env
 docker compose up --build
 ```
 

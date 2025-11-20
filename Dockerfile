@@ -18,8 +18,6 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=/app/pyproject.toml \
     uv sync --locked --no-install-project --no-dev
 
-# Prepare data directory and ensure app directory is writable for instance folder
-RUN mkdir -p /data && chown -R 1000:1000 /data /app
 RUN mkdir -p /tmp/.cache/uv && chown -R 1000:1000 /tmp/.cache
 
 COPY src ./src

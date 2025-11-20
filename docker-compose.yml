@@ -9,6 +9,8 @@ services:
       - .env
     environment:
       - APP_DEBUG=false
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
     volumes:
       - ./data:/data
     restart: unless-stopped
